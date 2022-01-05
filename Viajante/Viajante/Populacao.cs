@@ -1,99 +1,102 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Viajante
 {
     public class Populacao
     {
-        // Variaveis
-        public List<Caminho> p { get; private set; }
-        public double maxApt { get; private set; }
+        public List<Caminho> ListaCaminhos { get; private set; }    //Lista com os caminhos que compõem a população
+        public double MaxApt { get; private set; }  //Variável que armazena a aptidão máxima em uma população
 
-        // ctor
-        public Populacao(List<Caminho> l)
+        // Construtor que calula aptidão máxima e recebe a população a ser trabalhada
+        public Populacao(List<Caminho> populacao)
         {
-            this.p = l;
-            this.maxApt = this.calcMaxApt();
+            this.ListaCaminhos = populacao;
+            this.MaxApt = this.CalcMaxApt();
         }
 
-        // Métodos
-        public static Populacao randomizado(Caminho t, int n)
+        // Método para gerar população randomizada com base em um caminho passado como parâmetro
+        public static Populacao Randomizado(Caminho caminho, int n)
         {
-            List<Caminho> tmp = new List<Caminho>();
+            List<Caminho> tmp = new List<Caminho>();    //Lista de tamanho variável com os caminhos a serem gerados
 
             for (int i = 0; i < n; ++i)
-                tmp.Add(t.embaralhar());
+                tmp.Add(caminho.Embaralhar());          //Adiciona n novos caminhos embaralhados à lista
 
-            return new Populacao(tmp);
+            return new Populacao(tmp);                  //Retorna população de caminhos randomizados 
         }
 
-        private double calcMaxApt()
+        //Procura qual o caminho com maior valor de aptidão na população
+        private double CalcMaxApt()
         {
-            return this.p.Max(c => c.aptidao);
+            return this.ListaCaminhos.Max(c => c.Aptidao);
         }
 
-        public Caminho selecionar()
+        //Seleciona um caminho aleatório da população
+        public Caminho SelecionaCaminhoAleatorio()
         {
             while (true)
             {
-                int i = Program.r.Next(0, Amb.tamPop);
+                int i = Program.R.Next(0, Amb.tamPop);  //i recebe um número aleatório entre 0 o tamanho da população
 
-                if (Program.r.NextDouble() < this.p[i].aptidao / this.maxApt)
-                    return new Caminho(this.p[i].c);
+                if (Program.R.NextDouble() <= this.ListaCaminhos[i].Aptidao / this.MaxApt)   //Normaliza a aptidao do individuo i, compara com um double aleatorio entre 0 e 1
+                    return new Caminho(this.ListaCaminhos[i].ListaCidades);  //Retorna o caminho aleatório
             }
         }
 
-        public Populacao gerarNovaPop(int n)
+        //Função que gera uma nova população com base em cruzamento e possibilidade de mutação
+        public Populacao GerarNovaPop(int n)
         {
-            List<Caminho> p = new List<Caminho>();
+            List<Caminho> novaPop = new List<Caminho>();    //Lista que vai conter a nova população
 
             for (int i = 0; i < n; ++i)
             {
-                Caminho t = this.selecionar().cruzamento(this.selecionar());
+                Caminho caminho = this.SelecionaCaminhoAleatorio().Cruzamento(this.SelecionaCaminhoAleatorio()); //Faz o cruzamento de dois caminhos aleatórios da população
 
-                foreach (Cidade c in t.c)
-                    t = t.mutacao();
+                foreach (Cidade c in caminho.ListaCidades)    //Aplica a função de mutação em cada um dos caminhos
+                    caminho = caminho.Mutacao();              //Mutação pode ou não ocorrer dependendo da taxa de mutação
 
-                p.Add(t);
+                novaPop.Add(caminho);   //Novo caminho é adicionado a lista da nova população
             }
 
-            return new Populacao(p);
+            return new Populacao(novaPop);  //Retorna a nova população
         }
 
-        public Populacao elite(int n)
+        //Escolhe os n individuos mais aptos da população
+        public Populacao Elite(int n)
         {
-            List<Caminho> melhor = new List<Caminho>();
-            Populacao tmp = new Populacao(p);
+            List<Caminho> melhores = new List<Caminho>();   //Lista com os melhores caminhos que vao sendo extraidos da população total
+            Populacao populacaoAux = new Populacao(ListaCaminhos);      //Lista temporaria com a população total, a elite vai sendo retirada dela e coloca na "melhores"
 
             for (int i = 0; i < n; ++i)
             {
-                melhor.Add(tmp.acharMelhor());
-                tmp = new Populacao(tmp.p.Except(melhor).ToList());
+                melhores.Add(populacaoAux.AcharMelhor());   //Adiciona o melhor individuo na lista dos melhores caminhos
+                populacaoAux = new Populacao(populacaoAux.ListaCaminhos.Except(melhores).ToList()); //População auxiliar recebe a população total sem os melhores
             }
 
-            return new Populacao(melhor);
+            return new Populacao(melhores); //Retorna os n melhores caminhos
         }
 
-        public Caminho acharMelhor()
+        //Acha o melhor caminho da população
+        public Caminho AcharMelhor()
         {
-            foreach (Caminho t in this.p)
+            foreach (Caminho caminho in this.ListaCaminhos) //Passa caminho a caminho da população
             {
-                if (t.aptidao == this.maxApt)
-                    return t;
+                if (caminho.Aptidao == this.MaxApt)     //Se a aptidao do caminho atual for igual ao melhor da população atual, retorna
+                    return caminho;
             }
 
             // Nunca deve chegar aqui
             return null;
         }
 
-        public Populacao evoluir()
+        //Faz a evolução da população
+        public Populacao Evoluir()
         {
-            Populacao best = this.elite(Amb.elitismo);
-            Populacao np = this.gerarNovaPop(Amb.tamPop - Amb.elitismo);
-            return new Populacao(best.p.Concat(np.p).ToList());
+            Populacao best = this.Elite(Amb.elitismo);  //Escolhe os (Amb.elistismo) individuos mais aptos da população
+            Populacao novaPop = this.GerarNovaPop(Amb.tamPop - Amb.elitismo);    //Nova população de (tamanho total - elite) é gerada com cruzamentos e mutações
+            return new Populacao(best.ListaCaminhos.Concat(novaPop.ListaCaminhos).ToList());    //População nova gerada concatenando a elite com a gerada por evolução
         }
 
     }
