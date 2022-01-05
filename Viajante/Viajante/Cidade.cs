@@ -1,35 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Viajante
 {
     public class Cidade
     {
         //Cada cidade tem como propriedades suas coordenadas x e y
-        public double x { get; private set; }
-        public double y { get; private set; }
+        public double X { get; private set; }
+        public double Y { get; private set; }
 
-        //Construtor 
+        //Construtor que carrega as coordenadas x e y para a cidade
         public Cidade(double x, double y)
         {
-            this.x = x;
-            this.y = y;
+            this.X = x;
+            this.Y = y;
         }
 
-        //Métodos
-        //Calcula a distância por x^2+y^2 = d^2
-        public double distancia(Cidade c)
+        //Calcula a distância da cidade interna ao objeto (this.cidade) com uma cidade recebida por parâmetro utilizando x^2+y^2 = d^2
+        public double Distancia(Cidade cidade)
         {
-            return Math.Sqrt(Math.Pow((c.x - this.x), 2)
-                        + Math.Pow((c.y - this.y), 2));
+            return Math.Sqrt(Math.Pow((cidade.X - this.X), 2)   //Tira a raiz da diferença entre as coordenadas X ao quadrado
+                        + Math.Pow((cidade.Y - this.Y), 2));    //Somada com a diferença entre as coordenadas Y ao quadrado
         }
 
-        public static Cidade aleatorio()
+        //Método cria nova cidade com coordenadas x e y aleatórias usando o objeto R
+        public static Cidade Aleatorio()
         {
-            return new Cidade(Program.r.NextDouble(), Program.r.NextDouble());
+            return new Cidade(Program.R.NextDouble(), Program.R.NextDouble());
         }
     }
 }
