@@ -1,0 +1,5 @@
+C:\Users\leodi\Documents\EVOLUTIVOS\Viajante\Viajante\Viajante\bin\Release\Viajante.exe.config
+C:\Users\leodi\Documents\EVOLUTIVOS\Viajante\Viajante\Viajante\bin\Release\Viajante.exe
+C:\Users\leodi\Documents\EVOLUTIVOS\Viajante\Viajante\Viajante\bin\Release\Viajante.pdb
+C:\Users\leodi\Documents\EVOLUTIVOS\Viajante\Viajante\Viajante\obj\Release\Viajante.exe
+C:\Users\leodi\Documents\EVOLUTIVOS\Viajante\Viajante\Viajante\obj\Release\Viajante.pdb
