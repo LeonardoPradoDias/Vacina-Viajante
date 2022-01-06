@@ -14,6 +14,7 @@ namespace Viajante
         //Distancia e aptidao serão calculadas por funcoes
         public double Distancia { get; private set; }
         public double Aptidao { get; private set; }
+        public bool OcorreuMut { get; private set; } //Variável que indica se a geração atual foi gerada com uma mutação ou não
 
         //Construtor recebe a lista de cidades que corresponde ao caminho e calcula a distancia total e aptidao (inverso da distancia)
 
@@ -22,8 +23,10 @@ namespace Viajante
             this.ListaCidades = caminho;
             this.Distancia = this.CalcDist();
             this.Aptidao = this.CalcAptidao();
+            this.OcorreuMut = false;
         }
 
+        //Nao utilizado quando for ler csv
         //Cria lista de cidades aleatória e recebe como parâmetro a quantidade de cidades
         /*public static Caminho Aleatorio(int n)
         {
@@ -97,9 +100,10 @@ namespace Viajante
         public Caminho Mutacao()
         {
             List<Cidade> aux = new List<Cidade>(this.ListaCidades); //Lista auxiliar em que ocorrerá ou não a mutação
-
+            bool mutou = false;
             if (Program.R.NextDouble() < Amb.taxaMut)   //Gera número aleatório entre 0 e 1, que será comparado a taxa de mutação, quanto mais alta mais chance de ter mutação
             {
+                mutou = true;
                 int i = Program.R.Next(0, this.ListaCidades.Count); //Recebe número aleatório entre zero e o número de cidades
                 int j = Program.R.Next(0, this.ListaCidades.Count); //Recebe número aleatório entre zero e o número de cidades
                 Cidade cidadeAux = aux[i];  //Cidade auxiliar será utilizada para trocar duas cidades aleatórias de ordem
@@ -107,7 +111,10 @@ namespace Viajante
                 aux[j] = cidadeAux; 
             }
 
-            return new Caminho(aux);    //Caminho após a mutação (ou não mutação) é retornado
+            Caminho novoCaminho = new Caminho(aux);
+            novoCaminho.OcorreuMut = mutou;
+
+            return novoCaminho;    //Caminho após a mutação (ou não mutação) é retornado
         }
 
         //Calcula a distância

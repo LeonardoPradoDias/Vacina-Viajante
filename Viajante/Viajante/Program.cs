@@ -1,6 +1,6 @@
 ﻿using System;
-
-
+using System.IO;
+using System.Text;
 
 namespace Viajante
 {
@@ -23,6 +23,9 @@ namespace Viajante
             {
                 //if (melhor)
                     ExibeResultado(populacao, geracao); //Mostra para o usuario o melhor caminho da geração atual
+                EscreveResultadoCSV(populacao, geracao);
+                if(melhor)
+                    EscreveMelhorCaminhoCSV(populacao, geracao);
 
                 melhor = false;                         //Reseta variável melhor para false
                 double antigo = populacao.MaxApt;       //Antigo agora recebe o melhor caminho da população
@@ -44,14 +47,46 @@ namespace Viajante
                 "Menor distancia: {2}\n", geracao, melhor.Aptidao, melhor.Distancia);
         }
 
+        //Função que cria arquivo CSV para ser utilizado depois
+
+        public static void EscreveResultadoCSV(Populacao populacao, int geracao)
+        {
+            Caminho melhor = populacao.AcharMelhor();
+            StreamWriter arquivo = new StreamWriter("resultadoAG.csv", true);
+            if(geracao == 0)
+                arquivo.WriteLine("Distancia;Aptidao;Geracao");
+
+            arquivo.WriteLine(melhor.Distancia + ";" + melhor.Aptidao + ";" + geracao.ToString() + ";" + melhor.OcorreuMut);
+            arquivo.Close();
+        }
+
+        public static void EscreveMelhorCaminhoCSV(Populacao populacao, int geracao)
+        {
+            Caminho melhor = populacao.AcharMelhor();
+            StreamWriter arquivo = new StreamWriter("caminhos.csv", true);
+
+            arquivo.Write(geracao.ToString() + ";");
+            arquivo.Write(melhor.Distancia + ";");
+            arquivo.Write(melhor.OcorreuMut + ";");
+
+            for(int i = 0; i < melhor.ListaCidades.Count; i++)
+            {
+                arquivo.Write(melhor.ListaCidades[i].Nome + ";");
+            }
+            arquivo.WriteLine();
+
+            arquivo.Close();
+
+        }
+
     }
     //Classe referente ao ambiente, onde são aplicados os parâmetros do algoritmo
     public static class Amb
     {
-        public const double taxaMut = 0.03; //Número entre zero e um que indica a probabilidade de uma mutação ocorrer
-        public const int elitismo = 5; //Quantidade de melhores indivíduos que permanecerão inalterados para a próxima geração
-        public const int tamPop = 30;   //Tamanho total da população (de caminhos) que será utilizada no algoritmo
-        public const int numCidades = 300;   //Número total de cidades em que se deve encontrar um caminho
-        public const int numGeracoes = 1000;    //Critério de parada referente ao número de gerações do algoritmo
+        public const double taxaMut = 0.1; //Número entre zero e um que indica a probabilidade de uma mutação ocorrer
+        public const int elitismo = 6; //Quantidade de melhores indivíduos que permanecerão inalterados para a próxima geração
+        public const int tamPop = 20;   //Tamanho total da população (de caminhos) que será utilizada no algoritmo
+        public const int numCidades = 10;   //Número total de cidades em que se deve encontrar um caminho
+        public const int numGeracoes = 100;    //Critério de parada referente ao número de gerações do algoritmo
     }
 }
