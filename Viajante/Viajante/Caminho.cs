@@ -1,5 +1,7 @@
 ﻿
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 
@@ -23,14 +25,38 @@ namespace Viajante
         }
 
         //Cria lista de cidades aleatória e recebe como parâmetro a quantidade de cidades
-        public static Caminho Aleatorio(int n)
+        /*public static Caminho Aleatorio(int n)
         {
             List<Cidade> cidades = new List<Cidade>();  //Cria lista de tamanho variável com cidades
 
             for (int i = 0; i < n; ++i)
-                cidades.Add(Cidade.Aleatorio());        //Adiciona cidades aleatórias na lista
+                //cidades.Add(Cidade.Aleatorio());        //Adiciona cidades aleatórias na lista
 
             return new Caminho(cidades);                //Retorna o caminho com cidades aleatórias
+        }*/
+
+
+        //Função que lê arquivo csv com a lista de cidades de um estado e retorna um caminho inicial composto de todas as cidades em sequência
+        public static Caminho LerCsv(int nLinhas)
+        {
+            List<Cidade> cidades = new List<Cidade>();  //Lista que armazenará as cidades
+            using(StreamReader reader = new StreamReader(@"SP.csv"))    //Abre o arquivo para leitura
+            {
+                
+                string[] valores;   //Sequência de strings que armazenará cada uma das colunas por vez
+                var linha = reader.ReadLine();  //Primeira linha é lida e ignorada (cabeçalho)
+
+                for (int i = 0; i < nLinhas; i++)
+                {
+                    linha = reader.ReadLine();  //Leitura de uma linha
+                    valores = linha.Split(';'); //Separação dos valores de cada coluna, indicada por ponto e vírgula
+                    //Cria nova cidade que será adicionada a lista de cidades com os valores extraídos do csv
+                    Cidade cidadeAux = new Cidade(Convert.ToDouble(valores[2]), Convert.ToDouble(valores[1]), Convert.ToInt32(valores[3]), valores[0]);
+
+                    cidades.Add(cidadeAux); //Adiciona a nova cidade na lista de cidades
+                }
+            }
+            return new Caminho(cidades);    //Retorna o caminho com as cidades
         }
 
         //Embaralha um caminho, usado para gerar uma população
@@ -99,8 +125,8 @@ namespace Viajante
 
         //Calcula a aptidao do caminho como o inverso da distância
         private double CalcAptidao()
-        {
-            return (1 / (this.Distancia + 1)); //+1 para o caso de a distancia ser zero
+        {                                             //Distancia divida por mil para o número de aptidão ficar maior
+            return (1 / ((this.Distancia/1000) + 1)); //+1 para o caso de a distancia ser zero
         }
 
 
