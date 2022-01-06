@@ -12,8 +12,8 @@ namespace Viajante
         {
             R = new Random();       //Inicializa um objeto para gerar números aleatórios
 
-            Caminho dest = Caminho.Aleatorio(Amb.numCidades);       //Cria caminho aleatório com a quantidade de cidades especificadas em Amb.numcidades
-
+            //Caminho dest = Caminho.Aleatorio(Amb.numCidades);       //Cria caminho aleatório com a quantidade de cidades especificadas em Amb.numcidades
+            Caminho dest = Caminho.LerCsv(Amb.numCidades);
             Populacao populacao = Populacao.Randomizado(dest, Amb.tamPop);  //Gera a população de tamPop individuos randomizada a partir do caminho que se tem
 
             int geracao = 0;    //Variavel que conta as gerações
@@ -21,7 +21,7 @@ namespace Viajante
 
             while (geracao < Amb.numGeracoes)
             {
-                if (melhor)
+                //if (melhor)
                     ExibeResultado(populacao, geracao); //Mostra para o usuario o melhor caminho da geração atual
 
                 melhor = false;                         //Reseta variável melhor para false
@@ -49,9 +49,9 @@ namespace Viajante
     public static class Amb
     {
         public const double taxaMut = 0.03; //Número entre zero e um que indica a probabilidade de uma mutação ocorrer
-        public const int elitismo = 30; //Quantidade de melhores indivíduos que permanecerão inalterados para a próxima geração
-        public const int tamPop = 60;   //Tamanho total da população (de caminhos) que será utilizada no algoritmo
-        public const int numCidades = 40;   //Número total de cidades em que se deve encontrar um caminho
+        public const int elitismo = 5; //Quantidade de melhores indivíduos que permanecerão inalterados para a próxima geração
+        public const int tamPop = 30;   //Tamanho total da população (de caminhos) que será utilizada no algoritmo
+        public const int numCidades = 300;   //Número total de cidades em que se deve encontrar um caminho
         public const int numGeracoes = 1000;    //Critério de parada referente ao número de gerações do algoritmo
     }
 }
