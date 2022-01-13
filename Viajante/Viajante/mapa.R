@@ -1,9 +1,7 @@
 library(ggplot2)
 library(geobr)
 library(ggrepel)
-library(ggforce)
-library(gganimate)
-library(gifsky)
+library(animation)
 
 n <- 40
 
@@ -16,13 +14,17 @@ dados$Geracao <- as.integer(dados$Geracao)
 
 num_gen <- nrow(dados)/n
 
-i <- 0
-while (i < num_gen) {
-  dataSP <- dados[i*n+1:(i+1)*n, ]
-
 sp <- read_state(code_state = "SP")
-
 options(ggrepel.max.overlaps = Inf)
+
+i <- 0
+saveGIF({
+while (i < num_gen) {
+  
+  arg1 <- i*n+1
+  arg2 <- n*(i+1)
+  
+  dataSP <- dados[arg1:arg2, ]
 
 aux1 <- dataSP$Longitude[-1]
 xend_cities <- append(aux1, dataSP$Longitude[1])
@@ -36,18 +38,16 @@ citiesSP <- data.frame(gen = dataSP$Geracao,
                        lat = dataSP$Latitude, 
                        muni = dataSP$Nome)
 
-ggplot(sp)+
+leg <- paste("Geração: ", dataSP$Geracao[1])
+subleg <- paste("Distância: ", dataSP$Distancia[1], "km")
+
+print(ggplot(sp)+
   geom_sf(fill = '#FDF9E4')+
   geom_point(data = citiesSP, aes(x = lon, y = lat), size = 2, pch = 21)+
   geom_segment(data = citiesSP, aes(x = lon, y = lat, xend = xend_cities, 
                                     yend = yend_cities),color = "blue", 
                arrow = arrow(length = unit(0.2,"cm")))+
-  theme_light()+labs(x = NULL, y = NULL)
+  theme_light()+labs(title = leg, subtitle = subleg, x = NULL, y = NULL))
 
-i <- i+1
-
-}
-
-#animate(plot, renderer = gifski_renderer(), fps = 5)
-#anim_save('teste.gif', animation = plot)
-
+  i <- i+1
+}})
