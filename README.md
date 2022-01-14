@@ -5,7 +5,8 @@ Pode-se relacionar esta questão ao problema do Caixeiro Viajante (Travelling Sa
 
 Com base nisto, nosso trabalho consiste na aplicação de algoritmos evolutivos a fim de resolver este problema do Caixeiro Viajante contextualizado na distribuição de vacinas pelos estados de São Paulo e Minas Gerais, se utilizando de listas do IBGE com informações geográficas sobre as cidades (latitude e longitude), bem como demográficas (população), selecionando as *n* maiores cidades do estado desejado e permitindo ao algoritmo encontrar a melhor rota para percorrer estas cidades, através da evolução de gerações e critérios evolutivos como elitismo, população e taxa de mutação.
 
-A análise dos resultados do algoritmo evolutivo implementado foi feita com Matlab, para análise da evolução através das gerações, e com R, para visualização gráfica da evolução dos caminhos encontrados.
+A análise dos resultados do algoritmo evolutivo implementado foi feita com Matlab, para análise da evolução através das gerações, e com R, para visualização gráfica da evolução dos caminhos encontrados. Abaixo, um exemplo de visualização:
+![alt-text](https://github.com/LeonardoPradoDias/Vacina-Viajante/blob/main/evolu%C3%A7%C3%A3o.gif)
 
 **Vídeo do trabalho:** https://drive.google.com/file/d/1WrEDrEhO6E-O02fVomJY8KAY0nAyC5wy/view?usp=sharing
 
