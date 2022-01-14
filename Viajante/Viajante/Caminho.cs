@@ -43,7 +43,7 @@ namespace Viajante
         public static Caminho LerCsv(int nLinhas)
         {
             List<Cidade> cidades = new List<Cidade>();  //Lista que armazenará as cidades
-            using(StreamReader reader = new StreamReader(@"SP.csv"))    //Abre o arquivo para leitura
+            using(StreamReader reader = new StreamReader(@"MG.csv"))    //Abre o arquivo para leitura
             {
                 
                 string[] valores;   //Sequência de strings que armazenará cada uma das colunas por vez
@@ -88,8 +88,8 @@ namespace Viajante
             int i = Program.R.Next(0, caminho.ListaCidades.Count);  //Recebe número aleatório entre 0 e o número de cidades do caminho
             int j = Program.R.Next(i, caminho.ListaCidades.Count);  //Recebe número aleatório entre i e o número de cidades do caminho para que j sempre seja > que i
             List<Cidade> c1 = this.ListaCidades.GetRange(i, j - i + 1);  //Lista com as cidades com indices entre i e j de this.ListaCidades
-            List<Cidade> c2 = caminho.ListaCidades.Except(c1).ToList();  //Lista com as cidades de caminho, exceto aquelas que já estão em s
-            List<Cidade> cr = c2.Take(i)                             //Cria novo caminho/gene colocando as cidades s no meio das cidades ms
+            List<Cidade> c2 = caminho.ListaCidades.Except(c1).ToList();  //Lista com as cidades de caminho, exceto aquelas que já estão em c1
+            List<Cidade> cr = c2.Take(i)                             //Cria novo caminho/gene colocando as cidades c1 no meio das cidades c2
                              .Concat(c1)
                              .Concat(c2.Skip(i))
                              .ToList();

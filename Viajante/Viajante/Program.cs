@@ -47,33 +47,46 @@ namespace Viajante
                 "Menor distancia: {2}\n", geracao, melhor.Aptidao, melhor.Distancia);
         }
 
-        //Função que cria arquivo CSV para ser utilizado depois
+        //Função que cria arquivo CSV para ser interpretado pelo Matlab
+        //Escreve Distancia;Aptidao;Geraçao;Se caminho veio de uma mutação ou não
+        //Uma linha por geração, independente de ter melhorado o nao o caminho
 
         public static void EscreveResultadoCSV(Populacao populacao, int geracao)
         {
             Caminho melhor = populacao.AcharMelhor();
             StreamWriter arquivo = new StreamWriter("resultadoAG.csv", true);
             if(geracao == 0)
-                arquivo.WriteLine("Distancia;Aptidao;Geracao");
+                arquivo.WriteLine("Distancia;Aptidao;Geracao;Mutou");
 
             arquivo.WriteLine(melhor.Distancia + ";" + melhor.Aptidao + ";" + geracao.ToString() + ";" + melhor.OcorreuMut);
             arquivo.Close();
         }
 
+        //função que escreve em um .csv o melhor caminho encontrado na geração atual no formato:
+        //Geração;Distancia total;Caminho veio de uma mutação ou nao; Nome da cidade; lat; long
+        //Uma cidade para cada linha para facilitar o uso para a parte grafica em R
         public static void EscreveMelhorCaminhoCSV(Populacao populacao, int geracao)
         {
             Caminho melhor = populacao.AcharMelhor();
             StreamWriter arquivo = new StreamWriter("caminhos.csv", true);
 
-            arquivo.Write(geracao.ToString() + ";");
-            arquivo.Write(melhor.Distancia + ";");
-            arquivo.Write(melhor.OcorreuMut + ";");
-
-            for(int i = 0; i < melhor.ListaCidades.Count; i++)
+            //Para gerar um cabeçalho no arquivo
+            if(geracao == 0)
             {
-                arquivo.Write(melhor.ListaCidades[i].Nome + ";");
+                arquivo.WriteLine("Geracao;Distancia;Mutacao;Nome;Latitude;Longitude");
             }
-            arquivo.WriteLine();
+
+            for(int i = 0; i < melhor.ListaCidades.Count; i++) { 
+                arquivo.Write(geracao.ToString() + ";");
+                arquivo.Write(melhor.Distancia + ";");
+                arquivo.Write(melhor.OcorreuMut + ";");
+                
+                arquivo.Write(melhor.ListaCidades[i].Nome + ";");
+                arquivo.Write(melhor.ListaCidades[i].Latitude + ";");
+                arquivo.Write(melhor.ListaCidades[i].Longitude + ";");
+                arquivo.WriteLine();
+            }
+            
 
             arquivo.Close();
 
@@ -83,10 +96,10 @@ namespace Viajante
     //Classe referente ao ambiente, onde são aplicados os parâmetros do algoritmo
     public static class Amb
     {
-        public const double taxaMut = 0.1; //Número entre zero e um que indica a probabilidade de uma mutação ocorrer
-        public const int elitismo = 6; //Quantidade de melhores indivíduos que permanecerão inalterados para a próxima geração
-        public const int tamPop = 20;   //Tamanho total da população (de caminhos) que será utilizada no algoritmo
-        public const int numCidades = 10;   //Número total de cidades em que se deve encontrar um caminho
-        public const int numGeracoes = 100;    //Critério de parada referente ao número de gerações do algoritmo
+        public const double taxaMut = 0.03; //Número entre zero e um que indica a probabilidade de uma mutação ocorrer
+        public const int elitismo = 3; //Quantidade de melhores indivíduos que permanecerão inalterados para a próxima geração
+        public const int tamPop = 10;   //Tamanho total da população (de caminhos) que será utilizada no algoritmo
+        public const int numCidades = 100;   //Número total de cidades em que se deve encontrar um caminho
+        public const int numGeracoes = 30000;    //Critério de parada referente ao número de gerações do algoritmo
     }
 }

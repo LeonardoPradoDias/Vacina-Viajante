@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Viajante
 {
@@ -50,6 +51,8 @@ namespace Viajante
         {
             List<Caminho> novaPop = new List<Caminho>();    //Lista que vai conter a nova população
 
+            //Execução sequencial
+            
             for (int i = 0; i < n; ++i)
             {
                 Caminho caminho = this.SelecionaCaminhoAleatorio().Cruzamento(this.SelecionaCaminhoAleatorio()); //Faz o cruzamento de dois caminhos aleatórios da população
