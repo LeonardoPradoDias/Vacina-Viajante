@@ -1,0 +1,6 @@
+C:\Users\leodi\Documents\EVOLUTIVOS\Viajante\Viajante\Viajante\obj\Debug\Viajante.csprojAssemblyReference.cache
+C:\Users\leodi\Documents\EVOLUTIVOS\Viajante\Viajante\Viajante\bin\Debug\Viajante.exe.config
+C:\Users\leodi\Documents\EVOLUTIVOS\Viajante\Viajante\Viajante\bin\Debug\Viajante.exe
+C:\Users\leodi\Documents\EVOLUTIVOS\Viajante\Viajante\Viajante\bin\Debug\Viajante.pdb
+C:\Users\leodi\Documents\EVOLUTIVOS\Viajante\Viajante\Viajante\obj\Debug\Viajante.exe
+C:\Users\leodi\Documents\EVOLUTIVOS\Viajante\Viajante\Viajante\obj\Debug\Viajante.pdb
