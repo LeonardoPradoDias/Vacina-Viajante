@@ -5,10 +5,10 @@ library(ggrepel)
 library(animation)
 
 #Definição manual do número de cidades a serem analisadas
-n <- 60
+n <- 100
 
 #Leitura e adequação dos dados (saída do programa principal)
-dados <- read.csv('caminhos (2).csv', sep = ";", row.names = NULL)
+dados <- read.csv('0,03-5-10-100-30000 (5311).csv', sep = ";", row.names = NULL)
 colnames(dados) <- colnames(dados)[2:ncol(dados)]
 dados <- dados[ , - ncol(dados)]  
 dados$Latitude <- scan(text=dados$Latitude, dec=",", sep=".")
@@ -59,8 +59,8 @@ saveGIF({
             geom_label_repel(size = 2.5, data = cities_state[1, ], aes(x = lon, y = lat, label = muni))+
             geom_segment(data = cities_state, aes(x = lon, y = lat, xend = xend_cities, 
                                                   yend = yend_cities),color = "blue", 
-                         arrow = arrow(length = unit(0.2,"cm")))+
-            theme_light()+labs(title = leg, subtitle = subleg, x = NULL, y = NULL))
+                         arrow = arrow(length = unit(0.25,"cm")))+
+            theme_light()+labs(title = leg, subtitle = subleg, x = "Longitude", y = "Latitude"))
     
     i <- i+1
   }}, movie.name = 'evolução.gif', interval = 0.25, ani.width = 700, ani.lenght = 700)
